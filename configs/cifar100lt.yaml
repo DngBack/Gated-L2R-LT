@@ -1,0 +1,50 @@
+seed: 42
+num_classes: 100
+dataset: cifar100
+root: ./data
+imbalance_factor: 100
+max_images_per_class: 500
+val_fraction: 0.1
+batch_size: 128
+test_batch_size: 256
+num_workers: 4
+model:
+  name: resnet32
+  pretrained: false
+  feature_dim: 64
+train:
+  epochs: 200
+  optimizer: sgd
+  lr: 0.1
+  momentum: 0.9
+  weight_decay: 5e-4
+  lr_scheduler: cosine
+  warmup_epochs: 5
+  mixup_alpha: 0.0
+  cutmix_alpha: 0.0
+  label_smoothing: 0.0
+  clip_grad_norm: null
+validation:
+  batch_size: 256
+  num_workers: 4
+experts:
+  head:
+    loss: cross_entropy
+  tail:
+    loss: logit_adjustment
+    tau: 1.0
+  balanced:
+    loss: balanced_softmax
+abstain:
+  cost: 0.05
+  alpha_init: 1.0
+  mu_grid: [1.0, 6.0, 11.0]
+  max_alpha_updates: 10
+  smoothing: 0.7
+worst_group:
+  enabled: true
+  eg_steps: 25
+  eg_lr: 1.0
+  report_every: 1
+logging:
+  output_dir: ./outputs/cifar100lt
