@@ -85,7 +85,7 @@ def compute_metrics(
         for batch in dataloader:
             inputs = batch["x"].to(device)
             labels = batch["y"].to(device)
-            groups = torch.tensor(batch["group"], device=device)
+            groups = batch["group"].detach().clone().to(device)
 
             expert_probs = [expert.predict_proba(inputs) for expert in experts]
             features = build_gating_features(expert_probs)

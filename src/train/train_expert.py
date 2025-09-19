@@ -141,9 +141,9 @@ def main() -> None:
     params = [p for p in expert.model.parameters() if p.requires_grad]
     optimizer = SGD(
         params,
-        lr=cfg["train"]["lr"],
-        momentum=cfg["train"].get("momentum", 0.9),
-        weight_decay=cfg["train"].get("weight_decay", 5e-4),
+        lr=float(cfg["train"]["lr"]),
+        momentum=float(cfg["train"].get("momentum", 0.9)),
+        weight_decay=float(cfg["train"].get("weight_decay", 5e-4)),
         nesterov=True,
     )
     scheduler = CosineAnnealingLR(optimizer, T_max=cfg["train"]["epochs"])

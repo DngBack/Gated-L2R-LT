@@ -104,7 +104,7 @@ def main() -> None:
 
     params = PluginParameters(
         alpha=checkpoint["alpha"].to(device),
-        mu=checkpoint.get("mu", torch.zeros(group_info.num_groups(), device=device)),
+        mu=checkpoint.get("mu", torch.zeros(group_info.num_groups())).to(device),
         cost=cfg["abstain"]["cost"],
         class_to_group=torch.tensor(group_info.class_to_group, device=device),
     )

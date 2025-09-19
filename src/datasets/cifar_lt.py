@@ -225,7 +225,15 @@ def build_cifar_lt_datasets(
         random_seed=seed,
         transform=transform_test,
     )
-    test_dataset = _build_base_dataset(test_cfg)
+    base_test = _build_base_dataset(test_cfg)
+    # For test set, use all available samples (balanced)
+    # CIFAR-100 test set has 100 samples per class, CIFAR-10 has 1000 per class
+    if dataset.lower() == "cifar10":
+        test_samples_per_class = 1000
+    else:  # cifar100
+        test_samples_per_class = 100
+    test_counts = [test_samples_per_class] * num_classes
+    test_dataset = CIFARLongTail(base_test, test_counts, group_info.class_to_group, random_seed=seed)
 
     return train_subset, val_subset, test_dataset, group_info
 

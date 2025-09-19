@@ -50,7 +50,8 @@ class PluginParameters:
 
 
 def plugin_classifier(p: torch.Tensor, params: PluginParameters) -> Tuple[torch.Tensor, torch.Tensor]:
-    class_to_group = params.class_to_group
+    # Ensure class_to_group is on the same device as other tensors
+    class_to_group = params.class_to_group.to(params.alpha.device)
     alpha_inv = 1.0 / params.alpha[class_to_group]
     mu = params.mu[class_to_group]
 
